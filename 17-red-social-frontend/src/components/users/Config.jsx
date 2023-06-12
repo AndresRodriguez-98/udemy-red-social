@@ -9,7 +9,7 @@ export const Config = ({ tituloSubmit }) => {
 
   const [saved, setSaved] = useState("not_saved");
 
-  // siempre que hagamos un request tendro de una funcion poner el ASYNC ya que esperamos que vamos a esperar resultados
+  // ACORDARSE !! siempre que hagamos un request tendro de una funcion poner el ASYNC ya que esperamos que vamos a esperar resultados
   const updateUser = async (e) => {
     e.preventDefault();
 
@@ -21,8 +21,6 @@ export const Config = ({ tituloSubmit }) => {
 
     // borrar propiedad innecesaria
     delete newDataUser.file0;
-
-    console.log(newDataUser);
 
     // Actualizar usuario en la base de datos
 
