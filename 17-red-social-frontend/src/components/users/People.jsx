@@ -5,6 +5,7 @@ import { Global } from "../../helpers/Global";
 export const People = () => {
   const [users, setUsers] = useState([]); // genero un estado de usuarios
   const [page, setPage] = useState(1); // estado de pag (x defecto 1)
+  const [following, setFollowing] = useState([]);
 
   useEffect(() => {
     getUsers(page); // como es una funcion asincronica, necesito meterla adentro de un useEffect
@@ -12,7 +13,6 @@ export const People = () => {
   }, [page]);
 
   const getUsers = async (nextPage) => {
-
     // Peticion para sacar usuarios
     const request = await fetch(Global.url + "user/list/" + nextPage, {
       method: "GET",
@@ -33,6 +33,7 @@ export const People = () => {
       }
 
       setUsers(newUsers);
+      setFollowing(data.user_following);
     }
 
     // Paginación (cuando desplegamos una pagina para ver mas cosas , en este caso mas usuarios)
@@ -40,10 +41,48 @@ export const People = () => {
 
   const nextPage = () => {
     let next = page + 1;
-    setPage(next);   
-                      // No importa cuando terminan xq ambas tienen el mismo valor por copia.  
+    setPage(next);
+    // No importa cuando terminan xq ambas tienen el mismo valor por copia.
   };
 
+  const follow = async (userId) => {
+    //peticion al backend para guardar el follow
+    const request = await fetch(Global.url + "follow/save", {
+      method: "POST",
+      body: JSON.stringify({ followed: userId }),
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+
+    const data = await request.json();
+    // Cuando este todo correcto:
+    if (data.status == "success") {
+      // Actualizar estado de following, agregando el follow
+      setFollowing([...following, userId]);
+    }
+  };
+
+  const unfollow = async (userId) => {
+    //peticion al backend para BORRAR el follow
+    const request = await fetch(Global.url + "follow/unfollow/" + userId, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+
+    const data = await request.json();
+
+    // Cuando este todo correcto:
+    if (data.status == "success") {
+      // Actualizar estado de following, filtrando los datos para eliminar el antiguo userID que acabo de dejar de seguir
+      let filterFollowings = following.filter((followingUserId) => userId !== followingUserId);
+      setFollowing(filterFollowings);
+    }
+  };
   return (
     <>
       <header className="content__header">
@@ -87,13 +126,16 @@ export const People = () => {
               </div>
 
               <div className="post__buttons">
-                <a href="#" className="post__button post__button--green">
-                  Seguir
-                </a>
-
-                <a href="#" className="post__button">
-                  Dejar de seguir
-                </a>
+                {!following.includes(user._id) && (
+                  <a href="#" className="post__button post__button--green" onClick={() => follow(user._id)}>
+                    Seguir
+                  </a>
+                )}
+                {following.includes(user._id) && (
+                  <a href="#" className="post__button" onClick={() => unfollow(user._id)}>
+                    Dejar de seguir
+                  </a>
+                )}
               </div>
             </article>
           );
