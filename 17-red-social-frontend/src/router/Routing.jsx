@@ -11,6 +11,7 @@ import { People } from "../components/users/People";
 import { Config } from "../components/users/Config";
 import { Following } from "../components/follows/Following";
 import { Followers } from "../components/follows/Followers";
+import { Profile } from "../components/users/Profile";
 
 
 export const Routing = () => {
@@ -34,6 +35,7 @@ export const Routing = () => {
                         <Route path="ajustes" element={<Config tituloSubmit="Actulizar" />} />
                         <Route path="siguiendo/:userId" element={<Following />} />
                         <Route path="seguidores/:userId" element={<Followers />} />
+                        <Route path="perfil/:userId" element={<Profile />} />
                     </Route>
 
                     <Route

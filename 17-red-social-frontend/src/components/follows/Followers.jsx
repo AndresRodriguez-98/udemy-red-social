@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Global } from "../../helpers/Global";
 import { UserList } from "../users/UserList";
 import { useParams } from "react-router-dom";
+import { GetProfile } from "../../helpers/getProfile";
+import avatar from "../../assets/img/user.png"
 
 export const Followers = () => {
   const [users, setUsers] = useState([]); // genero un estado de usuarios
   const [page, setPage] = useState(1); // estado de pag (x defecto 1)
   const [following, setFollowing] = useState([]);
+  const [userProfile, setUserProfile] = useState({});
 
   const params = useParams();
 
   useEffect(() => {
     getUsers(page); // como es una funcion asincronica, necesito meterla adentro de un useEffect
     // cuando cargue el componente people x 1ra vez, se llama a un getUsers.
+    GetProfile(params.userId, setUserProfile);
   }, [page]);
 
   const getUsers = async (nextPage) => {
@@ -38,7 +42,6 @@ export const Followers = () => {
     });
 
     data.users = cleanUsers; // Ahora si vamos a devolver solo a los usuarios que sigue el usuario
-    
 
     // Crear un estado para poder listarlos
     if (data.follows && data.status == "success") {
@@ -64,7 +67,7 @@ export const Followers = () => {
   return (
     <>
       <header className="content__header">
-        <h1 className="content__title">Seguidores</h1>
+        <h1 className="content__title">Seguidores de {userProfile.name}</h1>
       </header>
 
       <UserList users={users} setUsers={setUsers} following={following} setFollowing={setFollowing} />
