@@ -3,7 +3,6 @@ import { Global } from "../../helpers/Global";
 import { UserList } from "../users/UserList";
 import { useParams } from "react-router-dom";
 import { GetProfile } from "../../helpers/getProfile";
-import avatar from "../../assets/img/user.png"
 
 export const Following = () => {
   const [users, setUsers] = useState([]); // genero un estado de usuarios

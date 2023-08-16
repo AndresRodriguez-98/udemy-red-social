@@ -153,7 +153,7 @@ const profile = (req, res) => {
 
             // Info de seguimiento
             const followInfo = await followService.followThisUser(req.user.id, id);
-
+        
             // Devolver el resultado 
             return res.status(200).send({
                 status: "success",
