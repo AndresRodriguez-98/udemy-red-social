@@ -9,6 +9,10 @@ import { AuthProvider } from "../context/AuthProvider";
 import { LogOut } from "../components/users/LogOut";
 import { People } from "../components/users/People";
 import { Config } from "../components/users/Config";
+import { Following } from "../components/follows/Following";
+import { Followers } from "../components/follows/Followers";
+import { Profile } from "../components/users/Profile";
+
 
 export const Routing = () => {
     return (
@@ -29,6 +33,9 @@ export const Routing = () => {
                         <Route path="logout" element={<LogOut />} />
                         <Route path="people" element={<People />} />
                         <Route path="ajustes" element={<Config tituloSubmit="Actulizar" />} />
+                        <Route path="siguiendo/:userId" element={<Following />} />
+                        <Route path="seguidores/:userId" element={<Followers />} />
+                        <Route path="perfil/:userId" element={<Profile />} />
                     </Route>
 
                     <Route
